@@ -1,11 +1,9 @@
 #! /usr/bin/python3 -u
 
-# (c) Copyright 2014-2016 HIPPEROS S.A.
-# (c) Copyright 2010-2013 Universite Libre de Bruxelles
-# (c) Copyright 2006-2013 MangoGem S.A.
-#
-# The license and distribution terms for this file may be
-# found in the file LICENSE.txt in this distribution.
+# Copyright © 2017 Sami Mezhoud <sami.mezhoud@ulb.ac.be>
+# This work is free. You can redistribute it and/or modify it under the
+# terms of the Do What The Fuck You Want To Public License, Version 2,
+# as published by Sam Hocevar. See the COPYING file for more details.
 
 """ ...
 
