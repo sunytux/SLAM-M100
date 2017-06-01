@@ -32,6 +32,7 @@ import copy
 import os
 import shutil
 import warnings
+import pickle
 
 # RanSaC parameters
 D_RANSAC = 20  # Degree range
@@ -58,6 +59,7 @@ PLOT_BLUE = 'cornflowerblue'
 PLOT_GREEN = 'forestgreen'
 PLOT_ORANGE = 'darkorange'
 PLOT_YELLOW = 'gold'
+PLOT_LIGHT_GREY = 'gainsboro'
 PLOT_COLORS = [PLOT_RED, PLOT_ORANGE, PLOT_YELLOW, 'navy'] * 10
 PLOT_AXIS = [-12, 12, -12, 12]
 PLOT_DRONE_HISTORY = 10  # seconds
@@ -90,10 +92,20 @@ def main():
         os.mkdir(FIGURE_DIR)
         os.mkdir(os.path.join(FIGURE_DIR, "pdf"))
         os.mkdir(os.path.join(FIGURE_DIR, "png"))
+        os.mkdir(os.path.join(FIGURE_DIR, "data"))
 
     data = pd.read_pickle(FILE)
 
     correctedData, X = SLAM(data)
+
+    if IS_PLOTTING_MODE:
+        s = FIGURE_DIR + "/data/{}"
+
+        dataFile = open(s.format("origData.pickle"), "wb")
+        correctedDataFile = open(s.format("correctedData.pickle"), "wb")
+
+        pickle.dump(data, dataFile)
+        pickle.dump(correctedData, correctedDataFile)
 
 
 def SLAM(origData):
@@ -200,7 +212,8 @@ def SLAM(origData):
                 plotStep2(correctedData, curData, previousCurData, X,
                           previousX, timeIdx)
             # New landmarks
-            if len(newLandmarkds) > 0:
+            #if len(newLandmarkds) > 0:
+            if len(curData) > 0:
                 plotStep3(correctedData, previousCurData, curData, X, timeIdx)
 
     if IS_VERBOSE_MODE:
@@ -217,7 +230,7 @@ def SLAM(origData):
 
     if IS_PLOTTING_MODE:
         plt.clf()
-        plt.scatter(origData.lidarX, origData.lidarY, color='gainsboro',
+        plt.scatter(origData.lidarX, origData.lidarY, color=PLOT_LIGHT_GREY,
                     marker='.', s=3, label='Raw data')
         plt.scatter(correctedData.lidarX, correctedData.lidarY, marker='.',
                     color=PLOT_BLUE, label='Corrected data', s=3)
@@ -258,7 +271,7 @@ def plotStep1(correctedData, previousCurData, previousX, time, localLandmarks):
     correctedData = pd.concat([correctedData, previousCurData])
 
     plt.plot(correctedData.droneX, correctedData.droneY,
-             color='gainsboro', zorder=1)
+             color=PLOT_LIGHT_GREY, zorder=1)
     plt.plot(previousCurData.droneX, previousCurData.droneY,
              color='gray', zorder=2)
     plotDroneMarker(previousCurData.iloc[-1])
@@ -291,7 +304,7 @@ def plotStep2(correctedData, curData, previousCurData, X, previousX, time):
     # Drone trajectory
     history = \
         correctedData[time - correctedData.time < PLOT_DRONE_HISTORY]
-    plt.plot(history.droneX, history.droneY, color='gainsboro', zorder=1)
+    plt.plot(history.droneX, history.droneY, color=PLOT_LIGHT_GREY, zorder=1)
     plt.plot(previousCurData.droneX, previousCurData.droneY,
              color=PLOT_RED, zorder=2)
     plotDroneMarker(previousCurData.iloc[-1], color=PLOT_RED)
@@ -333,7 +346,7 @@ def plotStep3(correctedData, previousCurData, curData, X, time):
     correctedData = pd.concat([correctedData, previousCurData])
 
     plt.plot(correctedData.droneX, correctedData.droneY,
-             color='gainsboro', zorder=1)
+             color=PLOT_LIGHT_GREY, zorder=1)
     plt.plot(previousCurData.droneX, previousCurData.droneY,
              color='gray', zorder=2)
     plotDroneMarker(previousCurData.iloc[-1])

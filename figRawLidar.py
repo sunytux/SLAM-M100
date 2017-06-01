@@ -18,7 +18,12 @@ import pandas as pd
 import numpy as np
 
 FIGURE_DIR = docopt(__doc__)['<FIGURE_DIR>']
-PLOT_COLORS = ['cornflowerblue', 'darkorange', 'forestgreen', 'tomato', 'gold']
+PLOT_RED = 'tomato'
+PLOT_BLUE = 'cornflowerblue'
+PLOT_GREEN = 'forestgreen'
+PLOT_ORANGE = 'darkorange'
+PLOT_YELLOW = 'gold'
+PLOT_COLORS = [PLOT_BLUE, PLOT_ORANGE, PLOT_GREEN, PLOT_RED, PLOT_YELLOW]
 PLOT_AXIS = [-12, 12, -12, 12]
 
 FILE = '/home/sami/work/memo/data/processed/manSlam03_clean.pickle'
@@ -26,7 +31,7 @@ FILE = '/home/sami/work/memo/data/processed/manSlam03_clean.pickle'
 
 def main():
     data = pd.read_pickle(FILE)
-    
+
     # Different plot
     data['color'] = np.where(data['time'] >= 27, 'forestgreen', 'cornflowerblue')
     data["color"][(data["time"] >= 42)] = "tomato"
